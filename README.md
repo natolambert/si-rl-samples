@@ -22,7 +22,8 @@ Plan of Attack:
 ---------------
 1. Make a linear system that fits the bill
 2. Implement observer design
-3. Run experiments.
+3. figure out this: with a tuning loop on the outside that keeps learning continuously from the data
+4. Run experiments.
 
 
 Additional Notes:
