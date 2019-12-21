@@ -21,7 +21,7 @@ Dependencies:
 Plan of Attack:
 ---------------
 1. Make a linear system that fits the bill
-2. Implement observer design
+2. Implement observer design (Try: https://github.com/python-control/python-control/blob/a4b4c43e51f0fc2cbf389336a90230a6a741c0dc/external/yottalab.py#L214)
 3. figure out this: with a tuning loop on the outside that keeps learning continuously from the data
 4. Run experiments.
 
