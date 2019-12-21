@@ -26,5 +26,18 @@ Plan of Attack:
 4. Run experiments.
 
 
-Additional Notes:
+Instructions:
 -----------------
+1. Create initial conda env
+'''
+conda env create -f environment.yml
+pip install control 
+pip install slycot
+conda activate samples
+'''
+2. Install dependencies
+'''
+git clone https://github.com/vitchyr/rlkit
+cd rlkit 
+pip install -e .
+'''
