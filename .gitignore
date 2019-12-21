@@ -1,0 +1,4 @@
+/outputs/
+/multirun/
+*.pyc
+.DS_Store
