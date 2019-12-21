@@ -22,12 +22,15 @@ dependencies:
   - pip:
     - control==0.8.2
     - cycler==0.10.0
+    - hydra-core==0.11.2
     - kiwisolver==1.1.0
     - matplotlib==3.1.2
     - numpy==1.17.4
+    - omegaconf==1.4.0
     - plotly==4.4.1
     - pyparsing==2.4.5
     - python-dateutil==2.8.1
+    - pyyaml==5.2
     - retrying==1.3.3
     - scipy==1.4.1
     - six==1.13.0
