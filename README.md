@@ -35,7 +35,7 @@ pip install control
 pip install slycot
 conda activate samples
 ```
-2. Install dependencies
+2. Install dependencies (anywhere on computer)
 ```
 git clone https://github.com/vitchyr/rlkit
 cd rlkit 
