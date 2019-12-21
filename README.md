@@ -1,4 +1,4 @@
-# stabalizable-learning-control
+# si-rl-samples
 
 Summary:
 --------
