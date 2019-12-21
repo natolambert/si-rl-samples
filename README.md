@@ -11,8 +11,18 @@ In the second corner: Various flavors of model-free Deep-RL. Policy gradients, D
 The question is: how dramatic is the difference in performance and sample complexity between these two.  Especially as the number of internal states increases.
 We had thought that this would be very cool for students to see, and would be a nice paper regardless.
 
+Dependencies:
+-------------
+1. https://github.com/python-control/python-control (need to add observer implementation for notion of sample efficiency)
+2. A group of RL baselines - I am considering RLKit, but I thinnk we should include model-based algorithms.
+  a) PETS for model-based RL (have a stable baseline)
+  b) SAC for model-free RL, (have a stable baseline)
+
 Plan of Attack:
 ---------------
+1. Make a linear system that fits the bill
+2. Implement observer design
+3. Run experiments.
 
 
 Additional Notes:
