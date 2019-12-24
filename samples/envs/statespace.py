@@ -3,6 +3,7 @@ import gym
 from gym import spaces, logger
 from gym.utils import seeding
 import numpy as np
+from control import StateSpace
 
 
 class StateSpaceEnv(gym.Env):
@@ -15,6 +16,7 @@ class StateSpaceEnv(gym.Env):
 
     def __init__(self, cfg):
         self.cfg = cfg
+        self.dt = cfg.dt
 
         # Angle limit set to 2 * theta_threshold_radians so failing observation is still within bounds
         high = np.array([
@@ -23,6 +25,12 @@ class StateSpaceEnv(gym.Env):
             self.theta_threshold_radians * 2,
             np.finfo(np.float32).max])
         self.seed(seed=cfg.random_seed)
+
+        a = np.mat(cfg.sys.params.A)
+        b = np.mat(cfg.sys.params.B)
+        c = np.mat(cfg.sys.params.C)
+        d = np.mat(cfg.sys.params.D)
+        self.sys = StateSpace(a, b, c, d, self.dt)
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)

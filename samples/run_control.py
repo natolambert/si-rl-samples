@@ -13,8 +13,7 @@ sys.path.append(os.getcwd())
 log = logging.getLogger(__name__)
 
 
-@hydra.main(config_path='samples/config.yaml')
-def experiment(cfg):
+def control(cfg):
     dt = .01
 
     # System matrices
@@ -40,7 +39,7 @@ def experiment(cfg):
     print("Wo = ", Wo)
     print(f"Rank of observability matrix is {np.linalg.matrix_rank(Wo)}")
 
-    observer = full_obs(system, (.01, .01, .01))
+    observer = full_obs(system, (.01, .011, .012))
     k_x = place(observer.A, observer.B, (.1, .11, .12))
 
     low = np.array([-1, -1, -1])
@@ -48,5 +47,10 @@ def experiment(cfg):
     x0 = np.random.uniform(low, high)
 
 
+@hydra.main(config_path='config.yaml')
+def experiment(cfg):
+    control(cfg)
+
 if __name__ == '__main__':
     sys.exit(experiment())
+
