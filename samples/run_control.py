@@ -2,10 +2,11 @@ import logging
 import os
 import sys
 import hydra
+import gym
 
-import numpy as np  # Load the scipy functions
+import numpy as np
 
-from control.matlab import *  # Load the controls systems libra
+from control.matlab import *
 from samples.control_ex import *
 
 # add cwd to path to allow running directly from the repo top level directory
@@ -17,17 +18,12 @@ def control(cfg):
     dt = .01
 
     # System matrices
-    A = np.array([[0, 1, 0],
-                  [0, 0, 1],
-                  [.5, 1.5, 3]])
+    A = np.mat(cfg.sys.A)
+    B = np.mat(cfg.sys.B)
+    C = np.mat(cfg.sys.C)
+    D = np.mat(cfg.sys.D)
 
-    B = np.array([[0],
-                  [0],
-                  [1]])
-
-    C = np.array([[1., 0, 0]])
-
-    system = StateSpace(A, B, C, 0, dt)
+    system = StateSpace(A, B, C, D, dt)
 
     # Check controllability
     Wc = ctrb(A, B)
@@ -39,18 +35,22 @@ def control(cfg):
     print("Wo = ", Wo)
     print(f"Rank of observability matrix is {np.linalg.matrix_rank(Wo)}")
 
-    observer = full_obs(system, (.01, .011, .012))
-    k_x = place(observer.A, observer.B, (.1, .11, .12))
+    observer = full_obs(system, (.01, .011, .012, .013))
+    k_x = place(observer.A, observer.B, (.1, .11, .12, .13))
 
     low = np.array([-1, -1, -1])
     high = np.array([1, 1, 1])
     x0 = np.random.uniform(low, high)
 
+    env = gym.make(cfg.sys.name)
+    env.setup(cfg)
+    for i in range(cfg.num_trials):
+        x0 = env.reset()
 
-@hydra.main(config_path='config.yaml')
+@hydra.main(config_path='conf/config.yaml')
 def experiment(cfg):
     control(cfg)
 
+
 if __name__ == '__main__':
     sys.exit(experiment())
-

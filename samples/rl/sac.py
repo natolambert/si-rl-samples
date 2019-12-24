@@ -1,23 +1,10 @@
 import os
-import sys
-
-# add cwd to path to allow running directly from the repo top level directory
-# sys.path.append(os.getcwd())
 
 from time import time, strftime, localtime
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
 import math
-import logging
-import hydra
 import gym
-
-# noinspection PyUnresolvedReferences
-from mbrl.environments.model_env import ModelEnv
-# noinspection PyUnresolvedReferences
-from mbrl import utils, environments
 
 from .utils import *
 
@@ -46,6 +33,7 @@ def sample_action(Actor, observation, cfg):
         else:
             raise ValueError("Deterministic Actor has no Sampling Method")
         return pi.cpu().data.numpy().flatten()
+
 
 def soft_update_params(net, target_net, tau):
     for param, target_param in zip(net.parameters(), target_net.parameters()):

@@ -81,7 +81,7 @@ def mbpo_experiment(cfg):
         return replay_buffer
 
     if cfg.model_env:
-        model_env =  # ModelEnv(real_env, dynamics_model)
+        model_env =  None # ModelEnv(real_env, dynamics_model)
     else:
         raise ValueError("MBPO Running on real environment is just SAC, run that")
 
@@ -136,14 +136,14 @@ def mbpo_experiment(cfg):
         if len(sasdata) <= num:
             return sasdata
         else:
-            new_data = SASDataset()
+            new_data = None #SASDataset()
             ind = len(sasdata) - 1
             while len(new_data) < num:
                 sars = sasdata[ind]
                 new_data.add(sars)
                 ind -= 1
             return new_data
-
+    '''
     # each epoch is for evaluation of the policy  #### #### #### #### #### #### #### #### #### #### #### ####
     for n in range(n_epochs):
         if n % 100 == 0:
@@ -216,6 +216,7 @@ def mbpo_experiment(cfg):
         )
         save_log(cfg, saved_idx, trial_log)
         saved_idx += 1
+    '''
 
 
 def save_log(cfg, trial_num, trial_log):

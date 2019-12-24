@@ -2,55 +2,31 @@ import os
 import sys
 
 # add cwd to path to allow running directly from the repo top level directory
-# sys.path.append(os.getcwd())
+sys.path.append(os.getcwd())
 
 from time import time, strftime, localtime
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import numpy as np
-import math
+# import torch
+# import torch.nn as nn
+# import torch.nn.functional as F
+# import numpy as np
+# import math
 import logging
 import hydra
 import gym
 
-# noinspection PyUnresolvedReferences
-from mbrl.environments.model_env import ModelEnv
-# noinspection PyUnresolvedReferences
-from mbrl import utils, environments
+log = logging.getLogger(__name__)
 
 from samples.rl.sac import SAC
 from samples.rl.utils import *
 
-def sac_experiment(cfg):
-    # configure target directory for all logs files (binary, text. models etc)
-    log_dir_suffix = cfg.log_dir_suffix or strftime("%Y-%m-%d_%H-%M-%S", localtime())
-    log_dir = os.path.join(cfg.log_dir or "logs", log_dir_suffix)
-    cfg.full_log_dir = log_dir
-    os.makedirs(cfg.full_log_dir)
 
+def sac_experiment(cfg):
     log.info("============= Configuration =============")
     log.info(f"Config:\n{cfg.pretty()}")
     log.info("=========================================")
 
-    real_env = gym.make(cfg.env.name)
-
-    # instantiate model for this round
-    dynamics_model = utils.instantiate(cfg.dynamics_model)
-
-    if cfg.model_env:
-        if 'Cartpole' in cfg.env.name:
-            m_dir = '/checkpoint/nol/runs/cartpole/cartpole-random-cem-2019-06-20_15-27-12/presets.optimizer:cem/8/trial_19.dat'
-            dynamics_model = torch.load(m_dir)['dynamics_model']
-
-        elif 'Cheetah' in cfg.env.name:
-            m_dir = '/checkpoint/nol/runs/cheetah-baseline-2019-06-24_18-32-36/training.full_epochs:100/0/trial_299.dat'
-            dynamics_model = torch.load(m_dir)['dynamics_model']
-
-        env_train = ModelEnv(real_env, dynamics_model)
-        env_test = ModelEnv(real_env, dynamics_model)
-
-        raise NotImplementedError("SAC on dynamics models not yes supported")
+    real_env = gym.make(cfg.sys.name)
+    real_env.setup(cfg)
 
     obs_dim = cfg.env.state_size
     action_dim = cfg.env.action_size
@@ -188,15 +164,15 @@ def sac_experiment(cfg):
 
 def save_log(cfg, trial_num, trial_log):
     name = cfg.checkpoint_file.format(trial_num)
-    path = os.path.join(cfg.full_log_dir, name)
+    path = os.path.join(os.getcwd(), name)
     log.info(f"T{trial_num} : Saving log {path}")
     torch.save(trial_log, path)
 
 
-log = logging.getLogger(__name__)
 @hydra.main(config_path='conf/config-sac.yaml')
 def experiment(cfg):
     sac_experiment(cfg)
+
 
 if __name__ == '__main__':
     sys.exit(experiment())
