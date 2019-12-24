@@ -41,3 +41,8 @@ git clone https://github.com/vitchyr/rlkit
 cd rlkit 
 pip install -e .
 ```
+
+misc experiment ideas:
+----------------------
+1. In real examples, RL works by repeated episodes and SI/Control works by identifying the states over time. What poles of the observer / controller result in a system that RL can solve but these cannot over short intervals.
+2. Do we want to consider how fast the observer converges, or the speed at which SI works. It should be the latter, my bad.
