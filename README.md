@@ -14,7 +14,8 @@ We had thought that this would be very cool for students to see, and would be a 
 Dependencies:
 -------------
 1. https://github.com/python-control/python-control (need to add observer implementation for notion of sample efficiency)
-2. A group of RL baselines - I am considering RLKit, but can we should include model-based algorithms? Not sure without different assumptions of state measurements.
+2. https://github.com/CPCLAB-UNIPI/SIPPY A system identification baseline package in python.
+3. A group of RL baselines - I am considering RLKit, but can we should include model-based algorithms? Not sure without different assumptions of state measurements.
   a) PETS for model-based RL (have a stable baseline)
   b) SAC for model-free RL, (have a stable baseline)
 
