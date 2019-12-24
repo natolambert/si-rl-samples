@@ -20,14 +20,19 @@ dependencies:
   - xz=5.2.4=h1de35cc_4
   - zlib=1.2.11=h1de35cc_3
   - pip:
+    - cloudpickle==1.2.2
     - control==0.8.2
     - cycler==0.10.0
+    - future==0.18.2
+    - gym==0.15.4
     - hydra-core==0.11.2
     - kiwisolver==1.1.0
     - matplotlib==3.1.2
     - numpy==1.17.4
     - omegaconf==1.4.0
+    - opencv-python==4.1.2.30
     - plotly==4.4.1
+    - pyglet==1.3.2
     - pyparsing==2.4.5
     - python-dateutil==2.8.1
     - pyyaml==5.2
@@ -35,5 +40,6 @@ dependencies:
     - scipy==1.4.1
     - six==1.13.0
     - slycot==0.3.5
+    - torch==1.3.1
 prefix: /miniconda3/envs/samples
 
