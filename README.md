@@ -14,7 +14,8 @@ We had thought that this would be very cool for students to see, and would be a 
 Dependencies:
 -------------
 1. https://github.com/python-control/python-control (need to add observer implementation for notion of sample efficiency)
-2. A group of RL baselines - I am considering RLKit, but can we should include model-based algorithms? Not sure without different assumptions of state measurements.
+2. https://github.com/CPCLAB-UNIPI/SIPPY A system identification baseline package in python.
+3. A group of RL baselines - I am considering RLKit, but can we should include model-based algorithms? Not sure without different assumptions of state measurements.
   a) PETS for model-based RL (have a stable baseline)
   b) SAC for model-free RL, (have a stable baseline)
 
@@ -41,3 +42,8 @@ git clone https://github.com/vitchyr/rlkit
 cd rlkit 
 pip install -e .
 ```
+
+misc experiment ideas:
+----------------------
+1. In real examples, RL works by repeated episodes and SI/Control works by identifying the states over time. What poles of the observer / controller result in a system that RL can solve but these cannot over short intervals.
+2. Do we want to consider how fast the observer converges, or the speed at which SI works. It should be the latter, my bad.
