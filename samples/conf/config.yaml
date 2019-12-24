@@ -1,10 +1,12 @@
 defaults:
   # systems
-  - sys: cartpole
+  - sys: ccf_3
   - policy: feedback
 
-num_trials: 20
-trial_timesteps: 100
 #device: cuda
 random_seed: 10
 checkpoint_file: trial_{}.dat
+
+experiment:
+  num_trials: 20
+  trial_timesteps: 100
