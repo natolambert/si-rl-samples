@@ -55,6 +55,9 @@ class StateSpaceEnv(gym.Env):
     def get_obs(self):
         return np.matmul(self.sys.C, self.state)
 
+    def _get_state(self):
+        return self.state
+
     def step(self, action):
         if not self.setup_ran:
             raise ValueError("System not yet passed")
@@ -72,4 +75,5 @@ class StateSpaceEnv(gym.Env):
 
     def reset(self):
         self.state = self.np_random.uniform(low=-0.05, high=0.05, size=(self.dx,1))
-        return np.array(self.state)
+        # return np.array(self.state
+        return self.get_obs()
