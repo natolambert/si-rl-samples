@@ -9,4 +9,4 @@ checkpoint_file: trial_{}.dat
 
 experiment:
   num_trials: 20
-  trial_timesteps: 25
+  trial_timesteps: 150

@@ -4,6 +4,8 @@ import sys
 import hydra
 import gym
 
+sys.path.append(os.getcwd())
+
 import numpy as np
 from past.utils import old_div
 
@@ -14,8 +16,9 @@ from sippy import functionset as fset
 from sippy import functionsetSIM as fsetSIM
 
 # add cwd to path to allow running directly from the repo top level directory
-sys.path.append(os.getcwd())
 log = logging.getLogger(__name__)
+
+from plotting import *
 
 
 def control(cfg):
@@ -44,8 +47,8 @@ def control(cfg):
     print("Wo = ", Wo)
     print(f"Rank of observability matrix is {np.linalg.matrix_rank(Wo)}")
 
-    fdbk_poles = np.random.uniform(0, .01, size=(np.shape(A)[0]))
-    obs_poles = np.random.uniform(0, .001, size=(np.shape(A)[0]))
+    fdbk_poles = np.random.uniform(0, .1, size=(np.shape(A)[0]))
+    obs_poles = np.random.uniform(0, .01, size=(np.shape(A)[0]))
 
     observer = full_obs(system, obs_poles)
     K = place(system.A, system.B, fdbk_poles)
@@ -67,15 +70,44 @@ def control(cfg):
     #     print(f"Time {t}, mean sq state error is {np.mean(env._get_state()-x_obs)**2}")
 
     log.info(f"Running rollouts on system {cfg.sys.name}")
-    states_r, actions_r, reward_r = rollout(env, random_controller(env), 500)
+    n_random = 1000
 
-    log.info(f"Random rollout, reward {np.sum(reward_r)}")
-    system_initial = sys_id(actions_r, states_r, dt, method='N4SID', order=dx)
+    # states_r, actions_r, reward_r = rollout(env, random_controller(env), n_random)
+    # log.info(f"Random rollout, reward {np.sum(reward_r)}")
+
+    states_r = []
+    actions_r = []
+    reward_r = []
+
+    # Input sequence
+    U = np.zeros((1, n_random))
+    U[0] = fset.GBN_seq(n_random, 0.05)
+
+    ##Output
+    x, yout = fsetSIM.SS_lsim_process_form(A, B, C, D, U)
+
+    # measurement noise
+    noise = fset.white_noise_var(n_random, [0.15])
+
+    # Output with noise
+    y_tot = yout + noise
+
+    ##System identification
+    method = 'N4SID'
+    system_initial = system_identification(y_tot, U, method, SS_fixed_order=np.shape(A)[0]) #, tsample=dt)
     system_initial.dt = dt
+    print(A)
+    print(np.round(system_initial.A,2))
+    xid, yid = fsetSIM.SS_lsim_process_form(system_initial.A, system_initial.B, system_initial.C, system_initial.D,
+                                            U, system_initial.x0)
+
+    # system_initial = sys_id(actions_r, states_r, dt, method='N4SID', order=dx, SS_fixed_order=np.shape(A)[0])
+    # system_initial.dt = dt
+
     observer = full_obs(system_initial, obs_poles)
     K = place(system_initial.A, system_initial.B, fdbk_poles)
 
-    print(np.array(cfg.sys.params.A))
+    # print(np.array(cfg.sys.params.A))
     # TODO integrate observer so that we can use state feedback
     log.info(f"Running {cfg.experiment.num_trials} trials with SI and feedback control")
     for i in range(cfg.experiment.num_trials):
@@ -99,14 +131,16 @@ def control(cfg):
 
         log.info(f"Rollout {i}: reward {np.sum(reward)}")
 
+    plot_rollout(states_r, actions_r)
 
-def sys_id(actions, measurements, dt, method='N4SID', order=None):
+
+def sys_id(actions, measurements, dt, method='PARSIM-K', order=None):
     actions = np.stack(actions)[:, :, 0]
     measurements = np.stack(measurements)[:, :, 0]
     assert np.shape(measurements)[1] == np.shape(actions)[1]
-    system = system_identification(measurements.T, actions.T, method, SS_f=5,
-                                   SS_fixed_order=order, SS_threshold=0.01,
-                                   tsample=dt)
+    system = system_identification(measurements.T, actions.T, method,  # SS_f=5,
+                                   SS_fixed_order=order,  # SS_threshold=0.01,
+                                   tsample=1)
     return system
 
 
@@ -132,8 +166,10 @@ def rollout_observer(env, controller, observer, num_steps):
     ys = []
     actions = []
     rews = []
+    states_true = []
+    states_est = []
     y = env.reset()
-    state_est = np.zeros((observer.states, 1)) #np.random.uniform(0, 1.0, size=(observer.states, 1))
+    state_est = np.zeros((observer.states, 1))  # np.random.uniform(0, 1.0, size=(observer.states, 1))
     for t in range(num_steps):
         if done:
             break
@@ -141,10 +177,18 @@ def rollout_observer(env, controller, observer, num_steps):
         state_est = np.matmul(observer.A, state_est) + np.matmul(observer.B, np.concatenate((action, y)))
 
         y, rew, done, _ = env.step(action)
+        if abs(y) > 10**4:
+            done = True
+
         ys.append(y)
         actions.append(np.array(action))
         rews.append(rew)
+        states_est.append(np.array(state_est))
+        states_true.append(np.array(env.state))  # NOT ACCESSIBLE BY ALGORITHM, For Diagnostic.
 
+    states_est = np.squeeze(np.stack(states_est))
+    states_true = np.squeeze(np.stack(states_true))
+    plot_observer_error(states_true, states_est)
     return ys, actions, rews
 
 
@@ -190,13 +234,13 @@ def experiment(cfg):
     x, yout = fsetSIM.SS_lsim_process_form(A, B, C, D, U)
 
     # measurement noise
-    noise = fset.white_noise_var(npts, [0.15])
+    noise = fset.white_noise_var(npts, [0.05])
 
     # Output with noise
     y_tot = yout + noise
 
     ##System identification
-    method = 'N4SID'
+    method = 'PARSIM-S'
     sys_id = system_identification(y_tot, U, method, SS_fixed_order=2)
 
 

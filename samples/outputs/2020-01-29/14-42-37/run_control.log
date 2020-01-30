@@ -1,0 +1,56 @@
+[2020-01-29 14:42:37,221][__main__][INFO] - ============= Configuration =============
+[2020-01-29 14:42:37,226][__main__][INFO] - Config:
+checkpoint_file: trial_{}.dat
+experiment:
+  num_trials: 20
+  trial_timesteps: 25
+random_seed: 10
+sys:
+  name: statespace-v0
+  params:
+    A:
+    - - 0
+      - 1
+      - 0
+    - - 0
+      - 0
+      - 1
+    - - 0.5
+      - 0.4
+      - 0.3
+    B:
+    - - 0
+    - - 0
+    - - 1
+    C:
+    - - 1
+      - 0
+      - 0
+    D:
+    - - 0
+    dt: 0.001
+
+[2020-01-29 14:42:37,226][__main__][INFO] - =========================================
+[2020-01-29 14:42:37,236][__main__][INFO] - Running rollouts on system statespace-v0
+[2020-01-29 14:42:37,276][__main__][INFO] - Random rollout, reward -4.285442279326985e+38
+[2020-01-29 14:42:37,306][__main__][INFO] - Running 20 trials with SI and feedback control
+[2020-01-29 14:42:37,329][__main__][INFO] - Rollout 0: reward -6.692012541583004e+24
+[2020-01-29 14:42:37,353][__main__][INFO] - Rollout 1: reward -0.14423344605499383
+[2020-01-29 14:42:37,378][__main__][INFO] - Rollout 2: reward -0.15611435317176373
+[2020-01-29 14:42:37,404][__main__][INFO] - Rollout 3: reward -0.19437675075112437
+[2020-01-29 14:42:37,431][__main__][INFO] - Rollout 4: reward -0.05389009780761622
+[2020-01-29 14:42:37,464][__main__][INFO] - Rollout 5: reward -0.18530736579301382
+[2020-01-29 14:42:37,498][__main__][INFO] - Rollout 6: reward -0.1033908331933068
+[2020-01-29 14:42:37,531][__main__][INFO] - Rollout 7: reward -0.19207428573096463
+[2020-01-29 14:42:37,567][__main__][INFO] - Rollout 8: reward -0.64905329593888
+[2020-01-29 14:42:37,615][__main__][INFO] - Rollout 9: reward -0.14800693824652839
+[2020-01-29 14:42:37,665][__main__][INFO] - Rollout 10: reward -0.016083638173672598
+[2020-01-29 14:42:37,719][__main__][INFO] - Rollout 11: reward -0.20988910575746672
+[2020-01-29 14:42:37,767][__main__][INFO] - Rollout 12: reward -0.10454019351472107
+[2020-01-29 14:42:37,809][__main__][INFO] - Rollout 13: reward -0.019877789518253242
+[2020-01-29 14:42:37,851][__main__][INFO] - Rollout 14: reward -0.29661352918994693
+[2020-01-29 14:42:37,896][__main__][INFO] - Rollout 15: reward -0.5650242762013544
+[2020-01-29 14:42:37,945][__main__][INFO] - Rollout 16: reward -0.018488112131182392
+[2020-01-29 14:42:37,996][__main__][INFO] - Rollout 17: reward -0.11039331543459346
+[2020-01-29 14:42:38,052][__main__][INFO] - Rollout 18: reward -0.15905578457378022
+[2020-01-29 14:42:38,106][__main__][INFO] - Rollout 19: reward -0.07391575824059436

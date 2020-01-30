@@ -1,0 +1,36 @@
+[2020-01-29 14:53:37,437][__main__][INFO] - ============= Configuration =============
+[2020-01-29 14:53:37,441][__main__][INFO] - Config:
+checkpoint_file: trial_{}.dat
+experiment:
+  num_trials: 20
+  trial_timesteps: 25
+random_seed: 10
+sys:
+  name: statespace-v0
+  params:
+    A:
+    - - 0
+      - 1
+      - 0
+    - - 0
+      - 0
+      - 1
+    - - 0.5
+      - 0.4
+      - 0.3
+    B:
+    - - 0
+    - - 0
+    - - 1
+    C:
+    - - 1
+      - 0
+      - 0
+    D:
+    - - 0
+    dt: 0.001
+
+[2020-01-29 14:53:37,441][__main__][INFO] - =========================================
+[2020-01-29 14:53:37,452][__main__][INFO] - Running rollouts on system statespace-v0
+[2020-01-29 14:53:37,490][__main__][INFO] - Random rollout, reward -4.519890965716958e+38
+[2020-01-29 14:53:37,522][__main__][INFO] - Running 20 trials with SI and feedback control
